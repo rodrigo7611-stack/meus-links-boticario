@@ -220,10 +220,11 @@
 
         <!-- Rodapé -->
         <div class="text-center mt-8 mb-5 pt-4 text-xs text-gray-400 border-t border-gray-200">
-            <i class="fas fa-code text-verde-boticario"></i> Desenvolvido por <a href="#"
+            <i class="fas fa-code text-verde-boticario"></i> Desenvolvido por <a href="#" id="linkWeblocal"
                 class="text-verde-boticario font-medium hover:underline">Weblocal Sites</a> | Todos os direitos
             reservados © 2026
         </div>
+
     </div>
 
     <!-- Tooltip WhatsApp -->
@@ -685,6 +686,29 @@
     });
     
     window.addEventListener('DOMContentLoaded', iniciarPopupAutomatico);
+
+        // ==================== LINK DO RODAPÉ PARA WHATSAPP ====================
+    const linkWeblocal = document.getElementById('linkWeblocal');
+    if (linkWeblocal) {
+        linkWeblocal.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Pegar número do WhatsApp da URL (se existir)
+            const urlParams = new URLSearchParams(window.location.search);
+            let whatsappNumber = urlParams.get('whatsapp');
+            
+            // Se não tiver número na URL, usa um padrão (coloque seu número aqui)
+            if (!whatsappNumber) {
+                whatsappNumber = '5541988629249'; // ← SUBSTITUA PELO SEU NÚMERO
+            }
+            
+            // Limpar número (deixar só dígitos)
+            const cleanNumber = whatsappNumber.replace(/\D/g, '');
+            
+            // Abrir WhatsApp
+            window.open(`https://wa.me/${cleanNumber}`, '_blank');
+        });
+    }
 </script>
 
 </body>
