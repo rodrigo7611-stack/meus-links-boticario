@@ -446,6 +446,247 @@
 
         window.addEventListener('DOMContentLoaded', initPage);
     </script>
+
+    <!-- Pop-up de Prova Social Realista -->
+<div id="socialProof" class="fixed bottom-5 left-5 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-3 flex items-center gap-3 z-[9997] transition-all duration-500 transform translate-x-[-120%] opacity-0 max-w-[340px] border border-gray-100">
+    <!-- Avatar/Ícone -->
+    <div class="relative flex-shrink-0">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-verde-boticario to-verde-claro flex items-center justify-center overflow-hidden">
+            <i class="fas fa-user text-white text-lg"></i>
+        </div>
+        <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+    </div>
+    
+    <div class="flex-1">
+        <p class="text-sm font-semibold text-gray-800">
+            <span id="socialNome" class="text-verde-boticario">Alguém</span>
+            <span id="socialAcao" class="font-normal text-gray-600">acabou de visualizar</span>
+        </p>
+        <div class="flex items-center gap-2 mt-1 flex-wrap">
+            <i class="fas fa-map-marker-alt text-[10px] text-gray-400"></i>
+            <span id="socialLocal" class="text-[11px] text-gray-400">Juiz de Fora, MG</span>
+            <span class="text-[10px] text-gray-300">•</span>
+            <i class="fas fa-clock text-[10px] text-gray-400"></i>
+            <span id="socialTempo" class="text-[11px] text-gray-400">agora mesmo</span>
+        </div>
+    </div>
+    
+    <button onclick="fecharPopup()" class="text-gray-300 hover:text-gray-500 transition-colors -mr-1">
+        <i class="fas fa-times text-xs"></i>
+    </button>
+</div>
+
+<script>
+    // ==================== PRODUTOS DO GRUPO BOTICÁRIO ====================
+    const produtos = [
+        "Malbec Tradicional",
+        "Malbec Gold",
+        "Floratta Rose Sucrée",
+        "Floratta Blue",
+        "kit Mães Lily",
+        "Creme Lily Acetinado",
+        "Egeo Bomb Black",
+        "Egeo Choc",
+        "Quem Disse, Berenice? Kit Matte",
+        "Base Líquida Berenice",
+        "O.U.i L'Élixir",
+        "O.U.i Mon Amie",
+        "Batom Instamatte Berenice",
+        "Perfume Lily Eau de Parfum",
+        "Kit Presente Malbec",
+        "Creme para mãos Eudora",
+        "Protetor solar Berenice",
+        "Kit Pulse Intenso Eudora"
+    ];
+    
+    // ==================== CIDADES DA ZONA DA MATA MINEIRA ====================
+    const cidades = [
+        "Juiz de Fora, MG",
+        "Ubá, MG",
+        "São João Nepomuceno, MG",
+        "Cataguases, MG",
+        "Leopoldina, MG",
+        "Santos Dumont, MG",
+        "Matias Barbosa, MG",
+        "Simão Pereira, MG",
+        "Rio Preto, MG",
+        "Pequeri, MG",
+        "Guarani, MG",
+        "Tabuleiro, MG",
+        "Coronel Pacheco, MG",
+        "Bias Fortes, MG",
+        "Chiador, MG"
+    ];
+    
+    // ==================== NOMES COMUNS DA REGIÃO ====================
+    const pessoas = [
+        "Maria F.", "Ana R.", "Fernanda L.", "Patrícia S.", "Juliana M.",
+        "Carla O.", "Roberta A.", "Tatiana R.", "Luciana F.", "Camila B.",
+        "Beatriz C.", "Renata M.", "Vanessa P.", "Aline N.", "Mariana L.",
+        "Letícia S.", "Isabela C.", "Larissa M.", "Natália R.", "Amanda F."
+    ];
+    
+    // ==================== AÇÕES COM PRODUTOS ====================
+    const acoesComProdutos = [
+        (p) => `acabou de ver ${p}`,
+        (p) => `está interessada em ${p}`,
+        (p) => `comprou ${p} agora`,
+        (p) => `adicionou ${p} ao carrinho`,
+        (p) => `viu ${p} há pouco`,
+        (p) => `está olhando ${p}`,
+        (p) => `acabou de comprar ${p}`,
+        (p) => `recomendou ${p} para amiga`,
+        (p) => `está vendo ${p} pela 2ª vez`,
+        (p) => `quer saber o preço de ${p}`
+    ];
+    
+    // Ações sem produto (genéricas)
+    const acoesGenericas = [
+        "acabou de ver a loja",
+        "está visualizando as ofertas",
+        "acabou de acessar",
+        "viu o catálogo há pouco",
+        "está na página agora",
+        "entrou agora mesmo",
+        "acabou de chegar",
+        "clicou no link há pouco",
+        "está vendo os produtos em promoção"
+    ];
+    
+    // Tempos relativos
+    const tempos = [
+        "agora mesmo",
+        "há 10 segundos",
+        "há 25 segundos",
+        "há 1 minuto",
+        "há 2 minutos",
+        "há 30 segundos",
+        "há 45 segundos",
+        "há 50 segundos",
+        "há 1 minuto e 15 segundos"
+    ];
+    
+    let popupInterval;
+    let popupAtivo = false;
+    let timeoutPopup;
+    let ultimosNomes = [];
+    let ultimoProduto = "";
+    
+    const popup = document.getElementById('socialProof');
+    const socialNome = document.getElementById('socialNome');
+    const socialAcao = document.getElementById('socialAcao');
+    const socialLocal = document.getElementById('socialLocal');
+    const socialTempo = document.getElementById('socialTempo');
+    
+    // Função para evitar nomes repetidos
+    function getNomeUnico() {
+        let nomesDisponiveis = pessoas.filter(n => !ultimosNomes.includes(n));
+        
+        if (nomesDisponiveis.length === 0) {
+            ultimosNomes = [];
+            nomesDisponiveis = pessoas;
+        }
+        
+        const randomIndex = Math.floor(Math.random() * nomesDisponiveis.length);
+        const escolhido = nomesDisponiveis[randomIndex];
+        
+        ultimosNomes.push(escolhido);
+        if (ultimosNomes.length > 3) ultimosNomes.shift();
+        
+        return escolhido;
+    }
+    
+    // Função para pegar produto diferente do último
+    function getProdutoUnico() {
+        let produtosDisponiveis = produtos.filter(p => p !== ultimoProduto);
+        if (produtosDisponiveis.length === 0) produtosDisponiveis = produtos;
+        
+        const escolhido = produtosDisponiveis[Math.floor(Math.random() * produtosDisponiveis.length)];
+        ultimoProduto = escolhido;
+        return escolhido;
+    }
+    
+    // Decidir se mostra ação com produto (70%) ou genérica (30%)
+    function getAcao() {
+        const temProduto = Math.random() < 0.7; // 70% com produto
+        
+        if (temProduto) {
+            const produto = getProdutoUnico();
+            const acaoIndex = Math.floor(Math.random() * acoesComProdutos.length);
+            return acoesComProdutos[acaoIndex](produto);
+        } else {
+            return acoesGenericas[Math.floor(Math.random() * acoesGenericas.length)];
+        }
+    }
+    
+    // Função para mostrar o pop-up
+    function mostrarPopup() {
+        if (popupAtivo) return;
+        
+        // Escolher dados aleatórios
+        const nome = getNomeUnico();
+        const acao = getAcao();
+        const cidade = cidades[Math.floor(Math.random() * cidades.length)];
+        const tempo = tempos[Math.floor(Math.random() * tempos.length)];
+        
+        // Atualizar conteúdo
+        socialNome.textContent = nome;
+        socialAcao.textContent = acao;
+        socialLocal.textContent = cidade;
+        socialTempo.textContent = tempo;
+        
+        // Mostrar pop-up com animação
+        popup.classList.remove('translate-x-[-120%]', 'opacity-0');
+        popup.classList.add('translate-x-0', 'opacity-100');
+        popupAtivo = true;
+        
+        // Esconder após 6 segundos
+        if (timeoutPopup) clearTimeout(timeoutPopup);
+        timeoutPopup = setTimeout(() => {
+            fecharPopup();
+        }, 6000);
+    }
+    
+    function fecharPopup() {
+        popup.classList.remove('translate-x-0', 'opacity-100');
+        popup.classList.add('translate-x-[-120%]', 'opacity-0');
+        popupAtivo = false;
+    }
+    
+    // Iniciar pop-up em intervalos aleatórios
+    function iniciarPopupAutomatico() {
+        if (popupInterval) clearInterval(popupInterval);
+        
+        const primeiroDelay = Math.floor(Math.random() * (7000 - 4000 + 1) + 4000);
+        setTimeout(() => {
+            mostrarPopup();
+        }, primeiroDelay);
+        
+        function agendarProximo() {
+            const intervalo = Math.floor(Math.random() * (16000 - 9000 + 1) + 9000);
+            popupInterval = setTimeout(() => {
+                mostrarPopup();
+                agendarProximo();
+            }, intervalo);
+        }
+        
+        agendarProximo();
+    }
+    
+    // Eventos
+    popup.addEventListener('mouseenter', () => {
+        if (timeoutPopup) clearTimeout(timeoutPopup);
+    });
+    
+    popup.addEventListener('mouseleave', () => {
+        timeoutPopup = setTimeout(() => {
+            fecharPopup();
+        }, 2000);
+    });
+    
+    window.addEventListener('DOMContentLoaded', iniciarPopupAutomatico);
+</script>
+
 </body>
 
 </html>
