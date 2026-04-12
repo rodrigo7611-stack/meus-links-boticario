@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Meus Links - Grupo Boticário</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Card principal */
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 24px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Logo/cabeçalho */
+        .logo-area {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #6b3e8f, #9b59b6);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+        }
+
+        .logo-icon i {
+            font-size: 36px;
+            color: white;
+        }
+
+        .logo-area h1 {
+            font-size: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .logo-area p {
+            font-size: 13px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* Título da seção */
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .section-title i {
+            margin-right: 8px;
+            color: #9b59b6;
+        }
+
+        /* Grid de botões */
+        .buttons-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background: #f8f8f8;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid #eee;
+        }
+
+        .btn-link:hover {
+            background: #f0f0f0;
+            transform: translateX(4px);
+        }
+
+        .btn-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-left i {
+            width: 24px;
+            font-size: 20px;
+            color: #9b59b6;
+        }
+
+        .btn-left span {
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .btn-right i {
+            font-size: 12px;
+            color: #bbb;
+        }
+
+        /* Destaque para loja */
+        .btn-highlight {
+            background: linear-gradient(135deg, #6b3e8f, #9b59b6);
+            border: none;
+        }
+
+        .btn-highlight .btn-left span {
+            color: white;
+            font-weight: 600;
+        }
+
+        .btn-highlight .btn-left i {
+            color: white;
+        }
+
+        .btn-highlight .btn-right i {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Subtítulo */
+        .subtitle {
+            font-size: 12px;
+            color: #aaa;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        /* ========== BOTÃO WHATSAPP FLUTUANTE ========== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+            z-index: 9999;
+            border: none;
+            cursor: pointer;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            background-color: #20b859;
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.5);
+        }
+
+        .whatsapp-float i {
+            font-size: 36px;
+        }
+
+        /* Tooltip do WhatsApp */
+        .whatsapp-tooltip {
+            position: fixed;
+            bottom: 105px;
+            right: 30px;
+            background: #1f1f1f;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            white-space: nowrap;
+            z-index: 9998;
+            animation: pulse 1.5s infinite;
+            font-family: inherit;
+        }
+
+        .whatsapp-tooltip i {
+            margin-right: 6px;
+            font-size: 14px;
+        }
+
+        .whatsapp-tooltip:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 25px;
+            border-width: 8px 8px 0;
+            border-style: solid;
+            border-color: #1f1f1f transparent transparent;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0.8; transform: scale(1); }
+        }
+
+        /* Rodapé */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: #bbb;
+        }
+
+        /* Ajuste para mobile pequeno */
+        @media (max-width: 480px) {
+            .whatsapp-float {
+                width: 55px;
+                height: 55px;
+                bottom: 20px;
+                right: 15px;
+            }
+            .whatsapp-float i {
+                font-size: 30px;
+            }
+            .whatsapp-tooltip {
+                font-size: 11px;
+                padding: 8px 14px;
+                bottom: 90px;
+                right: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Card principal -->
+        <div class="card">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fas fa-store"></i>
+                </div>
+                <h1>Loja da <span id="userName">Botari</span></h1>
+                <p><i class="fas fa-map-marker-alt"></i> Sua beleza em um só lugar</p>
+            </div>
+        </div>
+
+        <!-- Seção: Minha Loja Digital -->
+        <div class="card">
+            <div class="section-title">
+                <i class="fas fa-shopping-bag"></i> MINHA LOJA DIGITAL
+            </div>
+            <div class="buttons-grid">
+                <a href="#" id="lojaLink" class="btn-link btn-highlight" target="_blank">
+                    <div class="btn-left">
+                        <i class="fas fa-store"></i>
+                        <span>Ver minha loja digital</span>
+                    </div>
+                    <div class="btn-right">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+            </div>
+            <div class="subtitle">
+                <i class="fas fa-tag"></i> Acesse as guias do ciclo
+            </div>
+        </div>
+
+        <!-- Seção: Marcas / Links -->
+        <div class="card">
+            <div class="section-title">
+                <i class="fas fa-star"></i> NOSSAS MARCAS
+            </div>
+            <div class="buttons-grid">
+                <a href="https://www.boticario.com.br" class="btn-link" target="_blank">
+                    <div class="btn-left">
+                        <i class="fas fa-leaf"></i>
+                        <span>Revista O Boticário</span>
+                    </div>
+                    <div class="btn-right">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+                <a href="https://www.eudora.com.br" class="btn-link" target="_blank">
+                    <div class="btn-left">
+                        <i class="fas fa-spa"></i>
+                        <span>Guia Eudora</span>
+                    </div>
+                    <div class="btn-right">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+                <a href="https://www.quemdisseberenice.com.br" class="btn-link" target="_blank">
+                    <div class="btn-left">
+                        <i class="fas fa-heart"></i>
+                        <span>Quem Disse, Berenice?</span>
+                    </div>
+                    <div class="btn-right">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+                <a href="https://www.oui.com.br" class="btn-link" target="_blank">
+                    <div class="btn-left">
+                        <i class="fas fa-french-fries"></i>
+                        <span>O.U.i Paris</span>
+                    </div>
+                    <div class="btn-right">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Logo Grupo -->
+        <div class="card">
+            <div class="buttons-grid">
+                <a href="https://www.grupoboticario.com.br" class="btn-link" target="_blank">
+                    <div class="btn-left">
+                        <i class="fas fa-building"></i>
+                        <span>Logo Grupo</span>
+                    </div>
+                    <div class="btn-right">
+                        <i class="fas fa-external-link-alt"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <i class="fas fa-lock"></i> Links exclusivos para você
+        </div>
+    </div>
+
+    <!-- BOTÃO WHATSAPP FLUTUANTE -->
+    <div id="whatsappTooltip" class="whatsapp-tooltip" style="display: none;">
+        <i class="fab fa-whatsapp"></i> Fale comigo no WhatsApp
+    </div>
+    <a href="#" id="whatsappFloat" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // ==================== CONFIGURAÇÕES ====================
+        const CONFIG = {
+            LOJA_BASE_URL: 'https://minhaloja.grupoboticario.com.br/',
+            LOJA_UTM: '?utm_source=app_divulgar_marca&utm_medium=divulgar_loja_multimarca',
+            DEFAULT_NAME: 'Botari',
+            DEFAULT_WHATSAPP: ''
+        };
+
+        // ==================== FUNÇÃO PRINCIPAL ====================
+        function initPage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            const lojaId = urlParams.get('id');
+            const whatsappNumber = urlParams.get('whatsapp') || CONFIG.DEFAULT_WHATSAPP;
+            const userName = urlParams.get('nome') || CONFIG.DEFAULT_NAME;
+            
+            // 1. Configurar nome
+            if (userName) {
+                document.getElementById('userName').textContent = userName;
+                document.title = `Loja da ${userName} - Grupo Boticário`;
+            }
+            
+            // 2. Configurar link da loja
+            if (lojaId) {
+                const cleanId = lojaId.replace(/[^a-zA-Z0-9-]/g, '');
+                const lojaUrl = CONFIG.LOJA_BASE_URL + cleanId + CONFIG.LOJA_UTM;
+                const lojaLink = document.getElementById('lojaLink');
+                lojaLink.href = lojaUrl;
+            } else {
+                const lojaLink = document.getElementById('lojaLink');
+                lojaLink.href = '#';
+                lojaLink.style.opacity = '0.5';
+                lojaLink.style.pointerEvents = 'none';
+                console.warn('⚠️ ID da loja não fornecido. Use ?id=SEU_ID');
+            }
+            
+            // 3. Configurar WhatsApp Flutuante
+            if (whatsappNumber && whatsappNumber.length >= 10) {
+                const cleanWhatsapp = whatsappNumber.replace(/\D/g, '');
+                const whatsappUrl = `https://wa.me/${cleanWhatsapp}`;
+                const whatsappLink = document.getElementById('whatsappFloat');
+                whatsappLink.href = whatsappUrl;
+                
+                // Mostrar tooltip
+                const tooltip = document.getElementById('whatsappTooltip');
+                tooltip.style.display = 'block';
+                
+                // Esconder após 5 segundos
+                setTimeout(() => {
+                    if (tooltip) {
+                        tooltip.style.transition = 'opacity 0.5s';
+                        tooltip.style.opacity = '0';
+                        setTimeout(() => {
+                            tooltip.style.display = 'none';
+                        }, 500);
+                    }
+                }, 5000);
+            } else {
+                // Esconde o botão se não tem WhatsApp
+                const floatBtn = document.getElementById('whatsappFloat');
+                const tooltip = document.getElementById('whatsappTooltip');
+                if (floatBtn) floatBtn.style.display = 'none';
+                if (tooltip) tooltip.style.display = 'none';
+                console.log('ℹ️ WhatsApp não configurado');
+            }
+            
+            console.log('✅ Página carregada com:', {
+                lojaId: lojaId || '❌ Não informado',
+                whatsapp: whatsappNumber || '❌ Não informado',
+                nome: userName
+            });
+        }
+        
+        // Iniciar quando o DOM estiver pronto
+        window.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>
