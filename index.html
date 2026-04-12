@@ -1,38 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Cartão Digital - Grupo Boticário</title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
+        <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
-    <!-- Open Graph (para compartilhamento) -->
-    <meta property="og:title" content="Meus Links - Grupo Boticário" />
-    <meta property="og:description" content="Acesse minha loja digital e as guias das marcas O Boticário, Eudora, Berenice e O.U.i Paris" />
-    <meta property="og:image" content="https://bio.weblocalsites.com.br/og-image.png" />
+    <!-- Open Graph (imagem para compartilhamento) -->
+    <meta property="og:image" content="https://bio.weblocalsites.com.br/boas-vindas.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:url" content="https://SEU_DOMINIO/" />
     <meta property="og:type" content="website" />
 
-    <!-- Para WhatsApp e Facebook -->
-    <meta property="og:site_name" content="Cartão Digital - Grupo Boticário" />
-
-    <!-- Para Twitter/X -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Meus Links - Grupo Boticário" />
-    <meta name="twitter:description" content="Acesse minha loja digital e as guias das marcas" />
-    <meta name="twitter:image" content="bio.weblocalsites.com.br/og-image.png" />
-    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    
+
     <!-- Personalização do Tailwind -->
     <script>
         tailwind.config = {
@@ -47,52 +36,75 @@
             }
         }
     </script>
-    
+
     <style>
         /* Animação do tooltip */
         @keyframes pulse {
-            0% { opacity: 0.8; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
-            100% { opacity: 0.8; transform: scale(1); }
+            0% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+
+            100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
         }
+
         .animate-pulse-custom {
             animation: pulse 1.5s infinite;
         }
-        
+
         /* Botão WhatsApp flutuante */
         .whatsapp-float {
             transition: all 0.3s ease;
         }
+
         .whatsapp-float:hover {
             transform: scale(1.1);
             background-color: #20b859;
             box-shadow: 0 8px 20px rgba(37, 211, 102, 0.5);
         }
-        
+
         /* Esconder scrollbar do carrossel */
         .carousel-container {
             scrollbar-width: none;
             -ms-overflow-style: none;
             overflow-x: auto;
         }
+
         .carousel-container::-webkit-scrollbar {
             display: none;
         }
-        
+
         /* Animação de fade para o carrossel infinito */
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
+
         .carousel-item {
             animation: fadeIn 0.3s ease;
         }
     </style>
 </head>
+
 <body class="bg-gray-100 font-sans min-h-screen p-5 pb-20">
 
     <div class="max-w-[400px] mx-auto">
-        
+
         <!-- Card principal com LOGO -->
         <div class="bg-white rounded-3xl p-6 mb-4 shadow-md">
             <div class="text-center">
@@ -114,7 +126,9 @@
                 <i class="fas fa-shopping-bag text-verde-boticario mr-2"></i> MINHA LOJA DIGITAL
             </div>
             <div class="flex flex-col gap-2.5">
-                <a href="#" id="lojaLink" class="flex items-center justify-between bg-gradient-to-r from-verde-boticario to-verde-claro rounded-xl px-5 py-3.5 transition-all hover:translate-x-1" target="_blank">
+                <a href="#" id="lojaLink"
+                    class="flex items-center justify-between bg-gradient-to-r from-verde-boticario to-verde-claro rounded-xl px-5 py-3.5 transition-all hover:translate-x-1"
+                    target="_blank">
                     <div class="flex items-center gap-3">
                         <i class="fas fa-store text-white text-xl"></i>
                         <span class="text-white font-semibold text-[15px]">Ver minha loja digital</span>
@@ -135,28 +149,36 @@
                 <i class="fas fa-star text-verde-boticario mr-2"></i> NOSSAS MARCAS
             </div>
             <div class="flex flex-col gap-2.5">
-                <a href="https://minhaloja.boticario.com.br/catalogodigital?uf=MG&utm_source=site_catalogo_boticario&utm_medium=botao_acessar_catalogo&_gl=1*1j7g7ze*_gcl_au*NzI0ODM2MTk1LjE3NzU5ODgyODQ.*_ga*OTQ3MzA3NjY1LjE3NzU5OTAxNTQ.*_ga_6TZZX1WJH3*czE3NzU5OTEzMTQkbzEkZzEkdDE3NzU5OTE1NTkkajU0JGwwJGhw" class="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-3.5 border border-gray-100 transition-all hover:bg-gray-100 hover:translate-x-1" target="_blank">
+                <a href="https://minhaloja.boticario.com.br/catalogodigital?uf=MG&utm_source=site_catalogo_boticario&utm_medium=botao_acessar_catalogo&_gl=1*1j7g7ze*_gcl_au*NzI0ODM2MTk1LjE3NzU5ODgyODQ.*_ga*OTQ3MzA3NjY1LjE3NzU5OTAxNTQ.*_ga_6TZZX1WJH3*czE3NzU5OTEzMTQkbzEkZzEkdDE3NzU5OTE1NTkkajU0JGwwJGhw"
+                    class="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-3.5 border border-gray-100 transition-all hover:bg-gray-100 hover:translate-x-1"
+                    target="_blank">
                     <div class="flex items-center gap-3">
                         <i class="fas fa-leaf text-verde-boticario text-xl w-6"></i>
                         <span class="text-gray-800 font-medium text-[15px]">Revista O Boticário</span>
                     </div>
                     <i class="fas fa-arrow-right text-gray-300 text-xs"></i>
                 </a>
-                <a href="https://minhaloja.eudora.com.br/guiadigital?uf=MG&utm_source=site_guia_eudora&utm_medium=botao_acessar_catalogo&_gl=1*nfrouo*_gcl_au*MTA3OTY0NjM0NC4xNzc1OTkwMTYx*_ga*MTI0MjUwNjY1OC4xNzc1OTkwMTYy*_ga_6TZZX1WJH3*czE3NzU5OTAyNDMkbzEkZzEkdDE3NzU5OTE5NDgkajUzJGwwJGhw" class="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-3.5 border border-gray-100 transition-all hover:bg-gray-100 hover:translate-x-1" target="_blank">
+                <a href="https://minhaloja.eudora.com.br/guiadigital?uf=MG&utm_source=site_guia_eudora&utm_medium=botao_acessar_catalogo&_gl=1*nfrouo*_gcl_au*MTA3OTY0NjM0NC4xNzc1OTkwMTYx*_ga*MTI0MjUwNjY1OC4xNzc1OTkwMTYy*_ga_6TZZX1WJH3*czE3NzU5OTAyNDMkbzEkZzEkdDE3NzU5OTE5NDgkajUzJGwwJGhw"
+                    class="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-3.5 border border-gray-100 transition-all hover:bg-gray-100 hover:translate-x-1"
+                    target="_blank">
                     <div class="flex items-center gap-3">
                         <i class="fas fa-spa text-verde-boticario text-xl w-6"></i>
                         <span class="text-gray-800 font-medium text-[15px]">Guia Eudora</span>
                     </div>
                     <i class="fas fa-arrow-right text-gray-300 text-xs"></i>
                 </a>
-                <a href="https://catalogodigital.quemdisseberenice.com.br/" class="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-3.5 border border-gray-100 transition-all hover:bg-gray-100 hover:translate-x-1" target="_blank">
+                <a href="https://catalogodigital.quemdisseberenice.com.br/"
+                    class="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-3.5 border border-gray-100 transition-all hover:bg-gray-100 hover:translate-x-1"
+                    target="_blank">
                     <div class="flex items-center gap-3">
                         <i class="fas fa-heart text-verde-boticario text-xl w-6"></i>
                         <span class="text-gray-800 font-medium text-[15px]">Quem Disse, Berenice?</span>
                     </div>
                     <i class="fas fa-arrow-right text-gray-300 text-xs"></i>
                 </a>
-                <a href="#" class="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-3.5 border border-gray-100 transition-all hover:bg-gray-100 hover:translate-x-1" target="_blank">
+                <a href="#"
+                    class="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-3.5 border border-gray-100 transition-all hover:bg-gray-100 hover:translate-x-1"
+                    target="_blank">
                     <div class="flex items-center gap-3">
                         <i class="fas fa-french-fries text-verde-boticario text-xl w-6"></i>
                         <span class="text-gray-800 font-medium text-[15px]">O.U.i Paris</span>
@@ -170,16 +192,16 @@
         <div class="bg-white rounded-3xl p-6 mb-4 shadow-md">
             <div class="text-center mb-4">
                 <h2 class="text-sm font-semibold text-gray-600">
-                    <i class="fas fa-images text-verde-boticario mr-2"></i> 
+                    <i class="fas fa-images text-verde-boticario mr-2"></i>
                     As melhores marcas para você conhecer
                 </h2>
             </div>
-            
+
             <!-- Carrossel infinito -->
             <div id="carousel" class="carousel-container flex gap-6 overflow-x-auto pb-3">
                 <!-- As imagens serão inseridas via JavaScript para efeito infinito -->
             </div>
-            
+
             <!-- Bolinhas indicadoras -->
             <div class="flex justify-center gap-2 mt-4" id="carouselDots">
                 <!-- Gerado dinamicamente -->
@@ -198,17 +220,22 @@
 
         <!-- Rodapé -->
         <div class="text-center mt-8 mb-5 pt-4 text-xs text-gray-400 border-t border-gray-200">
-            <i class="fas fa-code text-verde-boticario"></i> Desenvolvido por <a href="#" class="text-verde-boticario font-medium hover:underline">Weblocal Sites</a> | Todos os direitos reservados © 2026
+            <i class="fas fa-code text-verde-boticario"></i> Desenvolvido por <a href="#"
+                class="text-verde-boticario font-medium hover:underline">Weblocal Sites</a> | Todos os direitos
+            reservados © 2026
         </div>
     </div>
 
     <!-- Tooltip WhatsApp -->
-    <div id="whatsappTooltip" class="fixed bottom-[105px] right-[30px] bg-gray-900 text-white text-[13px] font-medium py-2.5 px-5 rounded-full shadow-lg whitespace-nowrap z-[9998] animate-pulse-custom hidden">
+    <div id="whatsappTooltip"
+        class="fixed bottom-[105px] right-[30px] bg-gray-900 text-white text-[13px] font-medium py-2.5 px-5 rounded-full shadow-lg whitespace-nowrap z-[9998] animate-pulse-custom hidden">
         <i class="fab fa-whatsapp text-whatsapp mr-1.5"></i> Fale comigo no WhatsApp
     </div>
-    
+
     <!-- Botão WhatsApp Flutuante -->
-    <a href="#" id="whatsappFloat" class="whatsapp-float fixed bottom-[30px] right-[20px] bg-whatsapp text-white w-[65px] h-[65px] rounded-full flex items-center justify-center shadow-[0_6px_16px_rgba(37,211,102,0.4)] z-[9999] transition-all hover:scale-110" target="_blank" rel="noopener noreferrer">
+    <a href="#" id="whatsappFloat"
+        class="whatsapp-float fixed bottom-[30px] right-[20px] bg-whatsapp text-white w-[65px] h-[65px] rounded-full flex items-center justify-center shadow-[0_6px_16px_rgba(37,211,102,0.4)] z-[9999] transition-all hover:scale-110"
+        target="_blank" rel="noopener noreferrer">
         <i class="fab fa-whatsapp text-4xl"></i>
     </a>
 
@@ -224,28 +251,28 @@
         // ==================== DADOS DO CARROSSEL ====================
         // SUBSTITUA OS 'src' PELAS URLs DAS SUAS IMAGENS
         const marcas = [
-            { 
-                nome: 'O Boticário', 
+            {
+                nome: 'O Boticário',
                 src: 'logo-boticario.jpeg',
                 link: 'https://minhaloja.boticario.com.br/catalogodigital?uf=MG&utm_source=site_catalogo_boticario&utm_medium=botao_acessar_catalogo'
             },
-            { 
-                nome: 'Eudora', 
+            {
+                nome: 'Eudora',
                 src: 'logo-eudora.png',
                 link: 'https://minhaloja.eudora.com.br/guiadigital?uf=MG&utm_source=site_guia_eudora&utm_medium=botao_acessar_catalogo'
             },
-            { 
-                nome: 'Berenice', 
+            {
+                nome: 'Berenice',
                 src: 'logo-qdb.jpg',
                 link: 'https://catalogodigital.quemdisseberenice.com.br/'
             },
-            { 
-                nome: 'O.U.i Paris', 
+            {
+                nome: 'O.U.i Paris',
                 src: 'logo-oui.jpg',
                 link: '#'
             },
-            { 
-                nome: 'Aumigos', 
+            {
+                nome: 'Aumigos',
                 src: 'logo-aumigos.png',
                 link: 'https://www.grupoboticario.com.br'
             }
@@ -257,17 +284,17 @@
         // ==================== FUNÇÃO PRINCIPAL ====================
         function initPage() {
             const urlParams = new URLSearchParams(window.location.search);
-            
+
             const lojaId = urlParams.get('id');
             const whatsappNumber = urlParams.get('whatsapp') || CONFIG.DEFAULT_WHATSAPP;
             const userName = urlParams.get('nome') || CONFIG.DEFAULT_NAME;
-            
+
             // 1. Configurar nome
             if (userName) {
                 document.getElementById('userName').textContent = userName;
                 document.title = `Loja da ${userName} - Grupo Boticário`;
             }
-            
+
             // 2. Configurar link da loja
             if (lojaId) {
                 const cleanId = lojaId.replace(/[^a-zA-Z0-9-]/g, '');
@@ -281,17 +308,17 @@
                 lojaLink.style.pointerEvents = 'none';
                 console.warn('⚠️ ID da loja não fornecido. Use ?id=SEU_ID');
             }
-            
+
             // 3. Configurar WhatsApp Flutuante
             if (whatsappNumber && whatsappNumber.length >= 10) {
                 const cleanWhatsapp = whatsappNumber.replace(/\D/g, '');
                 const whatsappUrl = `https://wa.me/${cleanWhatsapp}`;
                 const whatsappLink = document.getElementById('whatsappFloat');
                 whatsappLink.href = whatsappUrl;
-                
+
                 const tooltip = document.getElementById('whatsappTooltip');
                 tooltip.style.display = 'block';
-                
+
                 setTimeout(() => {
                     if (tooltip) {
                         tooltip.style.transition = 'opacity 0.5s';
@@ -307,18 +334,18 @@
                 if (floatBtn) floatBtn.style.display = 'none';
                 if (tooltip) tooltip.style.display = 'none';
             }
-            
+
             // 4. Iniciar carrossel
             initCarousel();
-            
+
             console.log('✅ Página carregada');
         }
-        
+
         // ==================== CARROSSEL INFINITO ====================
         function initCarousel() {
             const carouselContainer = document.getElementById('carousel');
             const dotsContainer = document.getElementById('carouselDots');
-            
+
             // Renderizar itens do carrossel (infinito)
             carouselContainer.innerHTML = marcasInfinitas.map((marca, index) => `
                 <a href="${marca.link}" target="_blank" rel="noopener noreferrer" 
@@ -328,31 +355,31 @@
                     <span class="text-[11px] font-medium text-gray-600 text-center">${marca.nome}</span>
                 </a>
             `).join('');
-            
+
             // Criar bolinhas indicadoras (apenas para as marcas originais)
             dotsContainer.innerHTML = marcas.map((_, idx) => `
                 <div class="w-2 h-2 rounded-full bg-gray-300 transition-all duration-300 cursor-pointer" data-index="${idx}"></div>
             `).join('');
-            
+
             const dots = document.querySelectorAll('#carouselDots div');
             const items = carouselContainer.children;
             const itemWidth = 82; // 70px + gap
-            
+
             // Posicionar no meio do array (para permitir scroll infinito)
             const startPosition = marcas.length * itemWidth;
             carouselContainer.scrollLeft = startPosition;
-            
+
             let currentIndex = marcas.length; // índice real no array infinito
             let autoScrollInterval;
-            
+
             // Função para atualizar a bolinha ativa
             function updateActiveDot() {
                 const scrollLeft = carouselContainer.scrollLeft;
                 const newIndex = Math.round(scrollLeft / itemWidth);
-                
+
                 // Calcular o índice real (baseado nas marcas originais)
                 const originalIndex = newIndex % marcas.length;
-                
+
                 dots.forEach((dot, idx) => {
                     if (idx === originalIndex) {
                         dot.classList.remove('bg-gray-300');
@@ -364,9 +391,9 @@
                         dot.style.width = '8px';
                     }
                 });
-                
+
                 currentIndex = newIndex;
-                
+
                 // Efeito infinito: quando chega perto do fim, volta ao meio
                 if (currentIndex >= marcasInfinitas.length - marcas.length) {
                     carouselContainer.scrollLeft = startPosition + (currentIndex - (marcasInfinitas.length - marcas.length)) * itemWidth;
@@ -375,7 +402,7 @@
                     carouselContainer.scrollLeft = startPosition - (marcas.length - currentIndex) * itemWidth;
                 }
             }
-            
+
             // Scroll automático
             function startAutoScroll() {
                 if (autoScrollInterval) clearInterval(autoScrollInterval);
@@ -387,7 +414,7 @@
                     });
                 }, 3000);
             }
-            
+
             // Clique nas bolinhas
             dots.forEach((dot, idx) => {
                 dot.addEventListener('click', () => {
@@ -398,7 +425,7 @@
                     });
                 });
             });
-            
+
             // Eventos do carrossel
             carouselContainer.addEventListener('scroll', updateActiveDot);
             carouselContainer.addEventListener('mouseenter', () => {
@@ -409,15 +436,16 @@
                 if (autoScrollInterval) clearInterval(autoScrollInterval);
             });
             carouselContainer.addEventListener('touchend', startAutoScroll);
-            
+
             // Iniciar
             setTimeout(() => {
                 updateActiveDot();
                 startAutoScroll();
             }, 100);
         }
-        
+
         window.addEventListener('DOMContentLoaded', initPage);
     </script>
 </body>
+
 </html>
