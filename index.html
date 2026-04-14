@@ -6,23 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Cartão Digital - Revendedores</title>
 
-        <!-- Favicon -->
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
-    <!-- Open Graph (imagem para compartilhamento) -->
+    <!-- Open Graph -->
     <meta property="og:image" content="https://bio.weblocalsites.com.br/boas-vindas.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:type" content="website" />
 
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Font Awesome 6 -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-    <!-- Personalização do Tailwind -->
     <script>
         tailwind.config = {
             theme: {
@@ -38,65 +37,109 @@
     </script>
 
     <style>
-        /* Animação do tooltip */
         @keyframes pulse {
-            0% {
-                opacity: 0.8;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 1;
-                transform: scale(1.05);
-            }
-
-            100% {
-                opacity: 0.8;
-                transform: scale(1);
-            }
+            0% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0.8; transform: scale(1); }
         }
-
         .animate-pulse-custom {
             animation: pulse 1.5s infinite;
         }
-
-        /* Botão WhatsApp flutuante */
         .whatsapp-float {
             transition: all 0.3s ease;
         }
-
         .whatsapp-float:hover {
             transform: scale(1.1);
             background-color: #20b859;
             box-shadow: 0 8px 20px rgba(37, 211, 102, 0.5);
         }
-
-        /* Esconder scrollbar do carrossel */
         .carousel-container {
             scrollbar-width: none;
             -ms-overflow-style: none;
             overflow-x: auto;
         }
-
         .carousel-container::-webkit-scrollbar {
             display: none;
         }
-
-        /* Animação de fade para o carrossel infinito */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+        .banner-slide {
+            transition: opacity 0.5s ease-in-out;
         }
-
-        .carousel-item {
-            animation: fadeIn 0.3s ease;
+        .produto-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .produto-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        /* Modal do Carrinho - Corrigido */
+        .modal-carrinho {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-carrinho.ativo {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-conteudo {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 85vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal-carrinho.ativo .modal-conteudo {
+            transform: scale(1);
+        }
+        /* Botão Carrinho */
+        .cart-button {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            z-index: 9995;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .cart-button:hover {
+            transform: scale(1.1);
+        }
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ef4444;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -105,7 +148,7 @@
 
     <div class="max-w-[400px] mx-auto">
 
-        <!-- Card principal com LOGO -->
+        <!-- Card principal -->
         <div class="bg-white rounded-3xl p-6 mb-4 shadow-md">
             <div class="text-center">
                 <div class="mb-4">
@@ -114,81 +157,53 @@
                 <h1 class="text-xl font-semibold text-gray-800">
                     Loja da <span id="userName" class="font-bold">Botari</span>
                 </h1>
-                <div class="mt-2 text-sm text-gray-600 font-regular">
+                <div class="mt-2 text-sm text-gray-600">
                     Grupo Boticário <br> O melhor da beleza em um só lugar.
                 </div>
             </div>
         </div>
 
-        <!-- Seção: Minha Loja Digital -->
+        <!-- Banner Rotativo -->
+        <div class="bg-white rounded-3xl mb-4 shadow-md overflow-hidden relative">
+            <div id="bannerContainer" class="relative h-32"></div>
+            <div class="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5 z-10">
+                <div id="bannerDot0" class="w-1.5 h-1.5 rounded-full bg-white/50"></div>
+                <div id="bannerDot1" class="w-1.5 h-1.5 rounded-full bg-white/50"></div>
+                <div id="bannerDot2" class="w-1.5 h-1.5 rounded-full bg-white/50"></div>
+            </div>
+        </div>
+
+        <!-- Minha Loja Digital -->
         <div class="bg-white rounded-3xl p-6 mb-4 shadow-md">
             <div class="text-sm font-semibold text-gray-600 mb-3">
                 <i class="fas fa-shopping-bag text-verde-boticario mr-2"></i> MINHA LOJA DIGITAL
             </div>
-            <div class="flex flex-col gap-2.5">
-                <a href="#" id="lojaLink"
-                    class="flex items-center justify-between bg-gradient-to-r from-verde-boticario to-verde-claro rounded-xl px-5 py-3.5 transition-all hover:translate-x-1"
-                    target="_blank">
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-store text-white text-xl"></i>
-                        <span class="text-white font-semibold text-[15px]">Ver minha loja digital</span>
-                    </div>
-                    <div>
-                        <i class="fas fa-arrow-right text-white/70 text-xs"></i>
-                    </div>
-                </a>
-            </div>
+            <a href="#" id="lojaLink"
+                class="flex items-center justify-between bg-gradient-to-r from-verde-boticario to-verde-claro rounded-xl px-5 py-3.5 transition-all hover:translate-x-1"
+                target="_blank">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-store text-white text-xl"></i>
+                    <span class="text-white font-semibold text-[15px]">Ver minha loja digital</span>
+                </div>
+                <i class="fas fa-arrow-right text-white/70 text-xs"></i>
+            </a>
             <div class="text-center text-xs text-gray-400 mt-2">
                 <i class="fas fa-tag text-verde-boticario"></i> Acesse as guias do ciclo
             </div>
         </div>
 
-        <!-- Seção: Marcas com BOTÕES (mantido igual) -->
+        <!-- Carrossel de Ofertas -->
         <div class="bg-white rounded-3xl p-6 mb-4 shadow-md">
-            <div class="text-sm font-semibold text-gray-600 mb-3">
-                <i class="fas fa-star text-verde-boticario mr-2"></i> NOSSAS MARCAS
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-sm font-semibold text-gray-600">
+                    <i class="fas fa-fire text-verde-boticario mr-2"></i> OFERTAS ESPECIAIS
+                </h2>
+                <span class="text-[10px] text-gray-400">Clique no produto</span>
             </div>
-            <div class="flex flex-col gap-2.5">
-                <a href="https://minhaloja.boticario.com.br/catalogodigital?uf=MG&utm_source=site_catalogo_boticario&utm_medium=botao_acessar_catalogo&_gl=1*1j7g7ze*_gcl_au*NzI0ODM2MTk1LjE3NzU5ODgyODQ.*_ga*OTQ3MzA3NjY1LjE3NzU5OTAxNTQ.*_ga_6TZZX1WJH3*czE3NzU5OTEzMTQkbzEkZzEkdDE3NzU5OTE1NTkkajU0JGwwJGhw"
-                    class="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-3.5 border border-gray-100 transition-all hover:bg-gray-100 hover:translate-x-1"
-                    target="_blank">
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-leaf text-verde-boticario text-xl w-6"></i>
-                        <span class="text-gray-800 font-medium text-[15px]">Revista O Boticário</span>
-                    </div>
-                    <i class="fas fa-arrow-right text-gray-300 text-xs"></i>
-                </a>
-                <a href="https://minhaloja.eudora.com.br/guiadigital?uf=MG&utm_source=site_guia_eudora&utm_medium=botao_acessar_catalogo&_gl=1*nfrouo*_gcl_au*MTA3OTY0NjM0NC4xNzc1OTkwMTYx*_ga*MTI0MjUwNjY1OC4xNzc1OTkwMTYy*_ga_6TZZX1WJH3*czE3NzU5OTAyNDMkbzEkZzEkdDE3NzU5OTE5NDgkajUzJGwwJGhw"
-                    class="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-3.5 border border-gray-100 transition-all hover:bg-gray-100 hover:translate-x-1"
-                    target="_blank">
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-spa text-verde-boticario text-xl w-6"></i>
-                        <span class="text-gray-800 font-medium text-[15px]">Guia Eudora</span>
-                    </div>
-                    <i class="fas fa-arrow-right text-gray-300 text-xs"></i>
-                </a>
-                <a href="https://catalogodigital.quemdisseberenice.com.br/"
-                    class="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-3.5 border border-gray-100 transition-all hover:bg-gray-100 hover:translate-x-1"
-                    target="_blank">
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-heart text-verde-boticario text-xl w-6"></i>
-                        <span class="text-gray-800 font-medium text-[15px]">Quem Disse, Berenice?</span>
-                    </div>
-                    <i class="fas fa-arrow-right text-gray-300 text-xs"></i>
-                </a>
-                <a href="#"
-                    class="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-3.5 border border-gray-100 transition-all hover:bg-gray-100 hover:translate-x-1"
-                    target="_blank">
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-french-fries text-verde-boticario text-xl w-6"></i>
-                        <span class="text-gray-800 font-medium text-[15px]">O.U.i Paris</span>
-                    </div>
-                    <i class="fas fa-arrow-right text-gray-300 text-xs"></i>
-                </a>
-            </div>
+            <div id="produtosCarousel" class="carousel-container flex gap-3 overflow-x-auto pb-3"></div>
         </div>
 
-        <!-- CARROSSEL INFINITO DE BOLINHAS (IMAGENS) -->
+        <!-- Carrossel de Marcas -->
         <div class="bg-white rounded-3xl p-6 mb-4 shadow-md">
             <div class="text-center mb-4">
                 <h2 class="text-sm font-semibold text-gray-600">
@@ -196,49 +211,85 @@
                     As melhores marcas para você conhecer
                 </h2>
             </div>
-
-            <!-- Carrossel infinito -->
-            <div id="carousel" class="carousel-container flex gap-6 overflow-x-auto pb-3">
-                <!-- As imagens serão inseridas via JavaScript para efeito infinito -->
-            </div>
-
-            <!-- Bolinhas indicadoras -->
-            <div class="flex justify-center gap-2 mt-4" id="carouselDots">
-                <!-- Gerado dinamicamente -->
-            </div>
+            <div id="carousel" class="carousel-container flex gap-6 overflow-x-auto pb-3"></div>
+            <div class="flex justify-center gap-2 mt-4" id="carouselDots"></div>
         </div>
 
-        <!-- Logo Grupo - COM IMAGEM -->
-        <div class="bg-white rounded-3xl p-6 mb-4 shadow-md text-center">
-            <div class="mb-3">
-                <!--<img id="logoGrupo" src="LOGO AQUI.png" alt="Logo Grupo Boticário" class="w-20 h-auto max-w-full mx-auto rounded-full"> -->
-            </div>
-            <div class="text-sm font-medium text-gray-600">
-                <i class="fas fa-users text-verde-boticario mr-1"></i> Revendedores Grupo Boticário
-            </div>
+        <!-- Seção Venda -->
+        <div class="bg-gradient-to-r from-verde-boticario to-verde-claro rounded-3xl p-6 mb-4 shadow-md text-center">
+            <i class="fas fa-star-of-life text-white text-3xl mb-3"></i>
+            <h3 class="text-white text-lg font-bold mb-2">Quer um site igual a este?</h3>
+            <p class="text-white/80 text-sm mb-4">Tenha seu cartão digital profissional com links personalizados!</p>
+            <a href="#" id="vendaLink" class="inline-flex items-center gap-2 bg-white text-verde-boticario px-5 py-2.5 rounded-full font-semibold text-sm hover:scale-105 transition-all" target="_blank">
+                <i class="fab fa-whatsapp"></i> Fale com a Weblocal Sites
+            </a>
         </div>
 
         <!-- Rodapé -->
         <div class="text-center mt-8 mb-5 pt-4 text-xs text-gray-400 border-t border-gray-200">
-            <i class="fas fa-code text-verde-boticario"></i> Desenvolvido por <a href="#" id="linkWeblocal"
-                class="text-verde-boticario font-medium hover:underline">Weblocal Sites</a> | Todos os direitos
-            reservados © 2026
+            <i class="fas fa-code text-verde-boticario"></i> Desenvolvido por <a href="#" id="linkWeblocal" class="text-verde-boticario font-medium hover:underline">Weblocal Sites</a> | © 2026
         </div>
-
     </div>
 
-    <!-- Tooltip WhatsApp -->
-    <div id="whatsappTooltip"
-        class="fixed bottom-[105px] right-[30px] bg-gray-900 text-white text-[13px] font-medium py-2.5 px-5 rounded-full shadow-lg whitespace-nowrap z-[9998] animate-pulse-custom hidden">
+    <!-- Botão do Carrinho (Sacola) -->
+    <div class="cart-button" id="cartButton">
+        <i class="fas fa-shopping-bag text-2xl"></i>
+        <span class="cart-count" id="cartCount">0</span>
+    </div>
+
+    <!-- Botão WhatsApp Flutuante (ÚNICO) -->
+    <div id="whatsappTooltip" class="fixed bottom-[105px] right-[30px] bg-gray-900 text-white text-[13px] font-medium py-2.5 px-5 rounded-full shadow-lg whitespace-nowrap z-[9998] animate-pulse-custom hidden">
         <i class="fab fa-whatsapp text-whatsapp mr-1.5"></i> Fale comigo no WhatsApp
     </div>
-
-    <!-- Botão WhatsApp Flutuante -->
-    <a href="#" id="whatsappFloat"
-        class="whatsapp-float fixed bottom-[30px] right-[20px] bg-whatsapp text-white w-[65px] h-[65px] rounded-full flex items-center justify-center shadow-[0_6px_16px_rgba(37,211,102,0.4)] z-[9999] transition-all hover:scale-110"
-        target="_blank" rel="noopener noreferrer">
+    <a href="#" id="whatsappFloat" class="whatsapp-float fixed bottom-[30px] right-[20px] bg-whatsapp text-white w-[65px] h-[65px] rounded-full flex items-center justify-center shadow-lg z-[9999] transition-all hover:scale-110" target="_blank">
         <i class="fab fa-whatsapp text-4xl"></i>
     </a>
+
+    <!-- Modal do Carrinho -->
+    <div id="cartModal" class="modal-carrinho">
+        <div class="modal-conteudo">
+            <div class="sticky top-0 bg-white p-4 border-b border-gray-200 rounded-t-3xl flex justify-between items-center">
+                <h2 class="text-lg font-semibold"><i class="fas fa-shopping-bag text-verde-boticario mr-2"></i>Meu Carrinho</h2>
+                <button id="closeCart" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            <div id="cartItems" class="p-4 space-y-3 min-h-[200px]"></div>
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex justify-between font-bold text-lg mb-3">
+                    <span>Total:</span>
+                    <span id="cartTotal" class="text-verde-boticario">R$ 0,00</span>
+                </div>
+                
+                <!-- Formulário do Cliente -->
+                <div class="space-y-3 mb-4">
+                    <input type="text" id="clienteNome" placeholder="Seu nome completo" class="w-full p-3 border border-gray-300 rounded-xl text-sm">
+                    <input type="tel" id="clienteTelefone" placeholder="Seu WhatsApp (com DDD)" class="w-full p-3 border border-gray-300 rounded-xl text-sm">
+                </div>
+                
+                <!-- Formas de Pagamento -->
+                <div class="mb-4">
+                    <p class="text-sm font-semibold mb-2">Forma de Pagamento:</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center gap-2 p-2 border rounded-lg cursor-pointer">
+                            <input type="radio" name="pagamento" value="PIX" checked> <i class="fab fa-pix text-green-600"></i> PIX
+                        </label>
+                        <label class="flex items-center gap-2 p-2 border rounded-lg cursor-pointer">
+                            <input type="radio" name="pagamento" value="Dinheiro"> <i class="fas fa-money-bill text-green-600"></i> Dinheiro
+                        </label>
+                        <label class="flex items-center gap-2 p-2 border rounded-lg cursor-pointer">
+                            <input type="radio" name="pagamento" value="Cartão de Crédito"> <i class="fas fa-credit-card text-blue-600"></i> Cartão
+                        </label>
+                        <label class="flex items-center gap-2 p-2 border rounded-lg cursor-pointer">
+                            <input type="radio" name="pagamento" value="Crediário"> <i class="fas fa-calendar-alt text-purple-600"></i> Crediário
+                        </label>
+                    </div>
+                </div>
+                
+                <button id="finalizarCompra" class="w-full bg-whatsapp text-white py-3 rounded-xl font-semibold hover:scale-105 transition-all flex items-center justify-center gap-2">
+                    <i class="fab fa-whatsapp"></i> Enviar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // ==================== CONFIGURAÇÕES ====================
@@ -246,471 +297,327 @@
             LOJA_BASE_URL: 'https://minhaloja.grupoboticario.com.br/',
             LOJA_UTM: '?utm_source=app_divulgar_marca&utm_medium=divulgar_loja_multimarca',
             DEFAULT_NAME: 'Botari',
-            DEFAULT_WHATSAPP: ''
+            DEFAULT_WHATSAPP: '',
+            VENDA_WHATSAPP: '5541988629249'
         };
 
-        // ==================== DADOS DO CARROSSEL ====================
-        // SUBSTITUA OS 'src' PELAS URLs DAS SUAS IMAGENS
-        const marcas = [
-            {
-                nome: 'O Boticário',
-                src: 'logo-boticario.jpeg',
-                link: 'https://minhaloja.boticario.com.br/catalogodigital?uf=MG&utm_source=site_catalogo_boticario&utm_medium=botao_acessar_catalogo'
-            },
-            {
-                nome: 'Eudora',
-                src: 'logo-eudora.png',
-                link: 'https://minhaloja.eudora.com.br/guiadigital?uf=MG&utm_source=site_guia_eudora&utm_medium=botao_acessar_catalogo'
-            },
-            {
-                nome: 'Berenice',
-                src: 'logo-qdb.jpg',
-                link: 'https://catalogodigital.quemdisseberenice.com.br/'
-            },
-            {
-                nome: 'O.U.i Paris',
-                src: 'logo-oui.jpg',
-                link: '#'
-            },
-            {
-                nome: 'Aumigos',
-                src: 'logo-aumigos.png',
-                link: 'https://www.grupoboticario.com.br'
-            }
+        // ==================== BANNERS ====================
+        const banners = [
+            { texto: "🔥 PROMOÇÃO ESPECIAL! 🔥", subtexto: "KITS DE DIA DAS MÃES", cor: "bg-gradient-to-r from-red-500 to-pink-500" },
+            { texto: "💎 LANÇAMENTO FLORATTA ROSE 💎", subtexto: "Edição mais esperada!", cor: "bg-gradient-to-r from-amber-600 to-purple-500" },
+            { texto: "🎁 LANÇAMENTO DELEITE CARAMELIZADO", subtexto: "Nova sensação!", cor: "bg-gradient-to-r from-verde-boticario to-verde-claro" }
         ];
 
-        // Duplica as marcas para efeito infinito (clone do array)
-        let marcasInfinitas = [...marcas, ...marcas, ...marcas];
+        // ==================== PRODUTOS ====================
+        const produtosLista = [
+            { id: 1, nome: "Floratta Rose Sucrée 75ml", preco: 184.90, imagem: "floratta-rose-sucree.avif", desconto: 15, badge: "🔥 Super Oferta", badgeCor: "bg-red-500" },
+            { id: 2, nome: "Loção Deleite Caramelizado 400ml", preco: 59.90, imagem: "deleite-caramelizado.avif", desconto: 20, badge: "🏆 Mais Pedido", badgeCor: "bg-amber-500" },
+            { id: 3, nome: "Combo Deleite Caramelizado", preco: 180.70, imagem: "combo-deleite-caramelizado.avif", desconto: 18, badge: "🚀 Lançamento", badgeCor: "bg-blue-500" },
+            { id: 4, nome: "Lip Tint Creamy 4ml", preco: 59.90, imagem: "creamy.avif", desconto: 20, badge: "🏆 +5 cores", badgeCor: "bg-amber-500" },
+            { id: 5, nome: "Combo Pulse Intense", preco: 84.90, imagem: "combo-pulse-intense.avif", desconto: 29, badge: "🚀 Lançamento", badgeCor: "bg-blue-500" }
+        ];
 
-        // ==================== FUNÇÃO PRINCIPAL ====================
+        // ==================== MARCAS ====================
+        const marcas = [
+            { nome: 'O Boticário', src: 'logo-boticario.jpeg', link: 'https://minhaloja.boticario.com.br/catalogodigital?uf=MG' },
+            { nome: 'Eudora', src: 'logo-eudora.png', link: 'https://minhaloja.eudora.com.br/guiadigital?uf=MG' },
+            { nome: 'Berenice', src: 'logo-qdb.jpg', link: 'https://catalogodigital.quemdisseberenice.com.br/' },
+            { nome: 'O.U.i Paris', src: 'logo-oui.jpg', link: '#' },
+            { nome: 'Aumigos', src: 'logo-aumigos.png', link: 'https://www.grupoboticario.com.br' }
+        ];
+
+        // ==================== CARRINHO ====================
+        let carrinho = [];
+
+        function atualizarCarrinho() {
+            const cartCount = document.getElementById('cartCount');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            const totalItens = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
+            const totalValor = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+            
+            if (cartCount) cartCount.textContent = totalItens;
+            if (cartTotal) cartTotal.textContent = `R$ ${totalValor.toFixed(2).replace('.', ',')}`;
+            
+            if (cartItems) {
+                if (carrinho.length === 0) {
+                    cartItems.innerHTML = '<div class="text-center text-gray-400 py-8"><i class="fas fa-shopping-bag text-4xl mb-2"></i><p>Seu carrinho está vazio</p></div>';
+                } else {
+                    cartItems.innerHTML = carrinho.map(item => `
+                        <div class="flex justify-between items-center border-b pb-3">
+                            <div class="flex-1">
+                                <p class="text-sm font-semibold">${item.nome}</p>
+                                <p class="text-xs text-gray-500">R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="alterarQuantidade(${item.id}, -1)" class="w-7 h-7 bg-gray-200 rounded-full hover:bg-gray-300">-</button>
+                                <span class="w-8 text-center">${item.quantidade}</span>
+                                <button onclick="alterarQuantidade(${item.id}, 1)" class="w-7 h-7 bg-gray-200 rounded-full hover:bg-gray-300">+</button>
+                                <button onclick="removerProduto(${item.id})" class="ml-2 text-red-500 hover:text-red-700"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function adicionarAoCarrinho(produto) {
+            const existente = carrinho.find(item => item.id === produto.id);
+            if (existente) {
+                existente.quantidade++;
+            } else {
+                carrinho.push({ ...produto, quantidade: 1 });
+            }
+            atualizarCarrinho();
+            
+            // Feedback visual
+            const btn = document.querySelector(`[data-produto-id="${produto.id}"]`);
+            if (btn) {
+                btn.style.transform = 'scale(0.95)';
+                setTimeout(() => btn.style.transform = '', 200);
+            }
+        }
+
+        function alterarQuantidade(id, delta) {
+            const item = carrinho.find(item => item.id === id);
+            if (item) {
+                item.quantidade += delta;
+                if (item.quantidade <= 0) {
+                    carrinho = carrinho.filter(item => item.id !== id);
+                }
+                atualizarCarrinho();
+            }
+        }
+
+        function removerProduto(id) {
+            carrinho = carrinho.filter(item => item.id !== id);
+            atualizarCarrinho();
+        }
+
+        // ==================== ENVIAR PEDIDO ====================
+        function enviarPedido() {
+            const nome = document.getElementById('clienteNome')?.value.trim();
+            const telefone = document.getElementById('clienteTelefone')?.value.trim();
+            const pagamento = document.querySelector('input[name="pagamento"]:checked')?.value;
+            
+            if (!nome) {
+                alert('⚠️ Por favor, informe seu nome');
+                return;
+            }
+            if (!telefone) {
+                alert('⚠️ Por favor, informe seu WhatsApp');
+                return;
+            }
+            if (carrinho.length === 0) {
+                alert('⚠️ Seu carrinho está vazio');
+                return;
+            }
+            
+            // Montar mensagem
+            let mensagem = ` *NOVO PEDIDO - Grupo Boticário* \n\n`;
+            mensagem += ` *Cliente:* ${nome}\n`;
+            mensagem += ` *WhatsApp:* ${telefone}\n`;
+            mensagem += ` *Pagamento:* ${pagamento}\n\n`;
+            mensagem += ` *ITENS DO PEDIDO:*\n`;
+            mensagem += `─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n`;
+            
+            carrinho.forEach(item => {
+                mensagem += `▪️ ${item.quantidade}x ${item.nome}\n`;
+                mensagem += `   R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
+            });
+            
+            mensagem += `─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n`;
+            const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+            mensagem += `💰 *TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*\n\n`;
+            mensagem += `📲 *Entre em contato para confirmar o pedido!*`;
+            
+            // Codificar para URL
+            const mensagemEncoded = encodeURIComponent(mensagem);
+            
+            // Pegar número do WhatsApp da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            let whatsappNumber = urlParams.get('whatsapp') || CONFIG.DEFAULT_WHATSAPP;
+            const cleanWhatsapp = whatsappNumber.replace(/\D/g, '');
+            
+            // Abrir WhatsApp
+            window.open(`https://wa.me/${cleanWhatsapp}?text=${mensagemEncoded}`, '_blank');
+            
+            // Limpar carrinho e fechar modal
+            carrinho = [];
+            atualizarCarrinho();
+            fecharModal();
+            document.getElementById('clienteNome').value = '';
+            document.getElementById('clienteTelefone').value = '';
+        }
+
+        function abrirModal() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.add('ativo');
+            atualizarCarrinho();
+        }
+
+        function fecharModal() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.remove('ativo');
+        }
+
+        // ==================== BANNER ROTATIVO ====================
+        let bannerIndex = 0, bannerInterval;
+        function initBannerRotativo(whatsappNumber) {
+            const container = document.getElementById('bannerContainer');
+            if (!container) return;
+            container.innerHTML = banners.map((banner, idx) => `
+                <div class="banner-slide absolute inset-0 ${banner.cor} flex items-center justify-center text-center cursor-pointer ${idx === 0 ? 'opacity-100' : 'opacity-0'}" data-index="${idx}">
+                    <div><h3 class="text-white font-bold text-lg">${banner.texto}</h3><p class="text-white/80 text-sm">${banner.subtexto}</p></div>
+                </div>
+            `).join('');
+            document.querySelectorAll('.banner-slide').forEach(slide => {
+                slide.addEventListener('click', () => {
+                    if (whatsappNumber) window.open(`https://wa.me/${whatsappNumber.replace(/\D/g, '')}?text=Olá! Vi a promoção no site!`, '_blank');
+                });
+            });
+            bannerInterval = setInterval(() => {
+                const slides = document.querySelectorAll('.banner-slide');
+                const dots = document.querySelectorAll('[id^="bannerDot"]');
+                slides[bannerIndex].classList.remove('opacity-100');
+                slides[bannerIndex].classList.add('opacity-0');
+                if (dots[bannerIndex]) { dots[bannerIndex].classList.remove('bg-white', 'w-3'); dots[bannerIndex].classList.add('bg-white/50', 'w-1.5'); }
+                bannerIndex = (bannerIndex + 1) % banners.length;
+                slides[bannerIndex].classList.remove('opacity-0');
+                slides[bannerIndex].classList.add('opacity-100');
+                if (dots[bannerIndex]) { dots[bannerIndex].classList.remove('bg-white/50', 'w-1.5'); dots[bannerIndex].classList.add('bg-white', 'w-3'); }
+            }, 4000);
+        }
+
+        // ==================== CARROSSEL DE PRODUTOS ====================
+        function initProdutosCarousel() {
+            const container = document.getElementById('produtosCarousel');
+            if (!container) return;
+            container.innerHTML = produtosLista.map(produto => `
+                <div class="min-w-[140px] bg-gray-50 rounded-xl p-2.5 text-center relative border border-gray-100 produto-card" data-produto-id="${produto.id}" onclick="adicionarAoCarrinho({id:${produto.id}, nome:'${produto.nome}', preco:${produto.preco}, imagem:'${produto.imagem}'})">
+                    <div class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full w-10 h-10 flex items-center justify-center shadow-lg">-${produto.desconto}%</div>
+                    <div class="absolute top-2 left-2 ${produto.badgeCor} text-white text-[9px] font-bold px-2 py-0.5 rounded-full">${produto.badge}</div>
+                    <img src="${produto.imagem}" alt="${produto.nome}" class="w-20 h-20 mx-auto rounded-full object-cover mb-2 mt-6">
+                    <h4 class="text-xs font-semibold text-gray-800">${produto.nome}</h4>
+                    <p class="text-[10px] text-gray-400 line-through">R$ ${(produto.preco / (1 - produto.desconto/100)).toFixed(2).replace('.', ',')}</p>
+                    <p class="text-sm font-bold text-verde-boticario">R$ ${produto.preco.toFixed(2).replace('.', ',')}</p>
+                    <div class="mt-2 bg-whatsapp text-white text-[11px] py-1.5 rounded-full flex items-center justify-center gap-1"><i class="fab fa-whatsapp text-xs"></i> Adicionar</div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== CARROSSEL DE MARCAS ====================
+        let marcasInfinitas = [...marcas, ...marcas, ...marcas];
+        function initCarousel() {
+            const carouselContainer = document.getElementById('carousel');
+            const dotsContainer = document.getElementById('carouselDots');
+            if (!carouselContainer) return;
+            carouselContainer.innerHTML = marcasInfinitas.map(marca => `
+                <a href="${marca.link}" target="_blank" class="flex flex-col items-center gap-2 min-w-[70px] group transition-all hover:scale-105">
+                    <img src="${marca.src}" class="w-[70px] h-[70px] rounded-full object-cover shadow-md border-2 border-white group-hover:border-verde-boticario transition-all">
+                    <span class="text-[11px] font-medium text-gray-600">${marca.nome}</span>
+                </a>
+            `).join('');
+            dotsContainer.innerHTML = marcas.map((_, idx) => `<div class="w-2 h-2 rounded-full bg-gray-300 transition-all cursor-pointer" data-index="${idx}"></div>`).join('');
+            const dots = document.querySelectorAll('#carouselDots div');
+            const itemWidth = 82, startPosition = marcas.length * itemWidth;
+            carouselContainer.scrollLeft = startPosition;
+            let currentIndex = marcas.length, autoScrollInterval;
+            function updateActiveDot() {
+                const newIndex = Math.round(carouselContainer.scrollLeft / itemWidth);
+                const originalIndex = newIndex % marcas.length;
+                dots.forEach((dot, idx) => { dot.classList[idx === originalIndex ? 'add' : 'remove']('bg-verde-boticario'); dot.classList[idx === originalIndex ? 'remove' : 'add']('bg-gray-300'); if (idx === originalIndex) dot.style.width = '12px'; else dot.style.width = '8px'; });
+                currentIndex = newIndex;
+                if (currentIndex >= marcasInfinitas.length - marcas.length) carouselContainer.scrollLeft = startPosition + (currentIndex - (marcasInfinitas.length - marcas.length)) * itemWidth;
+                if (currentIndex <= marcas.length - 1) carouselContainer.scrollLeft = startPosition - (marcas.length - currentIndex) * itemWidth;
+            }
+            function startAutoScroll() { if (autoScrollInterval) clearInterval(autoScrollInterval); autoScrollInterval = setInterval(() => carouselContainer.scrollTo({ left: (currentIndex + 1) * itemWidth, behavior: 'smooth' }), 3000); }
+            dots.forEach((dot, idx) => dot.addEventListener('click', () => carouselContainer.scrollTo({ left: startPosition + idx * itemWidth, behavior: 'smooth' })));
+            carouselContainer.addEventListener('scroll', updateActiveDot);
+            carouselContainer.addEventListener('mouseenter', () => clearInterval(autoScrollInterval));
+            carouselContainer.addEventListener('mouseleave', startAutoScroll);
+            setTimeout(() => { updateActiveDot(); startAutoScroll(); }, 100);
+        }
+
+        // ==================== POPUP SOCIAL ====================
+        const produtosSocial = ["Malbec", "Floratta Rose", "Lily", "Egeo", "Kit Berenice"];
+        const cidadesSocial = ["Juiz de Fora, MG", "Ubá, MG", "Cataguases, MG", "Leopoldina, MG", "Santos Dumont, MG"];
+        const pessoasSocial = ["Maria F.", "Ana R.", "Fernanda L.", "Patrícia S.", "Juliana M.", "Carla O.", "Roberta A."];
+        let popupAtivo = false, timeoutPopup;
+        function mostrarPopup() {
+            if (popupAtivo) return;
+            const popup = document.getElementById('socialProof');
+            if (!popup) return;
+            document.getElementById('socialNome').textContent = pessoasSocial[Math.floor(Math.random() * pessoasSocial.length)];
+            document.getElementById('socialAcao').textContent = Math.random() > 0.3 ? `acabou de ver ${produtosSocial[Math.floor(Math.random() * produtosSocial.length)]}` : "acabou de ver a loja";
+            document.getElementById('socialLocal').textContent = cidadesSocial[Math.floor(Math.random() * cidadesSocial.length)];
+            document.getElementById('socialTempo').textContent = ["agora mesmo", "há 10 segundos", "há 1 minuto"][Math.floor(Math.random() * 3)];
+            popup.classList.remove('translate-x-[-120%]', 'opacity-0');
+            popup.classList.add('translate-x-0', 'opacity-100');
+            popupAtivo = true;
+            timeoutPopup = setTimeout(() => { popup.classList.add('translate-x-[-120%]', 'opacity-0'); popup.classList.remove('translate-x-0', 'opacity-100'); popupAtivo = false; }, 6000);
+        }
+        function initPopupSocial() { setTimeout(() => mostrarPopup(), 4000); setInterval(() => mostrarPopup(), 14000); }
+
+        // ==================== INICIALIZAÇÃO ====================
         function initPage() {
             const urlParams = new URLSearchParams(window.location.search);
-
             const lojaId = urlParams.get('id');
             const whatsappNumber = urlParams.get('whatsapp') || CONFIG.DEFAULT_WHATSAPP;
             const userName = urlParams.get('nome') || CONFIG.DEFAULT_NAME;
 
-            // 1. Configurar nome
-            if (userName) {
-                document.getElementById('userName').textContent = userName;
-                document.title = `Loja da ${userName} - Grupo Boticário`;
-            }
-
-            // 2. Configurar link da loja
-            if (lojaId) {
-                const cleanId = lojaId.replace(/[^a-zA-Z0-9-]/g, '');
-                const lojaUrl = CONFIG.LOJA_BASE_URL + cleanId + CONFIG.LOJA_UTM;
-                const lojaLink = document.getElementById('lojaLink');
-                lojaLink.href = lojaUrl;
-            } else {
-                const lojaLink = document.getElementById('lojaLink');
-                lojaLink.href = '#';
-                lojaLink.style.opacity = '0.5';
-                lojaLink.style.pointerEvents = 'none';
-                console.warn('⚠️ ID da loja não fornecido. Use ?id=SEU_ID');
-            }
-
-            // 3. Configurar WhatsApp Flutuante
+            if (userName) { document.getElementById('userName').textContent = userName; document.title = `Loja da ${userName}`; }
+            if (lojaId) { document.getElementById('lojaLink').href = CONFIG.LOJA_BASE_URL + lojaId.replace(/[^a-zA-Z0-9-]/g, '') + CONFIG.LOJA_UTM; }
             if (whatsappNumber && whatsappNumber.length >= 10) {
-                const cleanWhatsapp = whatsappNumber.replace(/\D/g, '');
-                const whatsappUrl = `https://wa.me/${cleanWhatsapp}`;
-                const whatsappLink = document.getElementById('whatsappFloat');
-                whatsappLink.href = whatsappUrl;
-
+                const clean = whatsappNumber.replace(/\D/g, '');
+                document.getElementById('whatsappFloat').href = `https://wa.me/${clean}`;
                 const tooltip = document.getElementById('whatsappTooltip');
                 tooltip.style.display = 'block';
-
-                setTimeout(() => {
-                    if (tooltip) {
-                        tooltip.style.transition = 'opacity 0.5s';
-                        tooltip.style.opacity = '0';
-                        setTimeout(() => {
-                            tooltip.style.display = 'none';
-                        }, 500);
-                    }
-                }, 5000);
-            } else {
-                const floatBtn = document.getElementById('whatsappFloat');
-                const tooltip = document.getElementById('whatsappTooltip');
-                if (floatBtn) floatBtn.style.display = 'none';
-                if (tooltip) tooltip.style.display = 'none';
+                setTimeout(() => { tooltip.style.opacity = '0'; setTimeout(() => tooltip.style.display = 'none', 500); }, 5000);
             }
+            if (CONFIG.VENDA_WHATSAPP) document.getElementById('vendaLink').href = `https://wa.me/${CONFIG.VENDA_WHATSAPP}?text=Olá! Gostei do modelo de site!`;
 
-            // 4. Iniciar carrossel
+            initBannerRotativo(whatsappNumber);
+            initProdutosCarousel();
             initCarousel();
-
-            console.log('✅ Página carregada');
+            initPopupSocial();
         }
 
-        // ==================== CARROSSEL INFINITO ====================
-        function initCarousel() {
-            const carouselContainer = document.getElementById('carousel');
-            const dotsContainer = document.getElementById('carouselDots');
+        // Eventos
+        document.getElementById('cartButton')?.addEventListener('click', abrirModal);
+        document.getElementById('closeCart')?.addEventListener('click', fecharModal);
+        document.getElementById('finalizarCompra')?.addEventListener('click', enviarPedido);
+        document.getElementById('cartModal')?.addEventListener('click', (e) => { if (e.target === document.getElementById('cartModal')) fecharModal(); });
 
-            // Renderizar itens do carrossel (infinito)
-            carouselContainer.innerHTML = marcasInfinitas.map((marca, index) => `
-                <a href="${marca.link}" target="_blank" rel="noopener noreferrer" 
-                   class="carousel-item flex flex-col items-center gap-2 min-w-[70px] snap-center group transition-all hover:scale-105">
-                    <img src="${marca.src}" alt="${marca.nome}" 
-                         class="w-[70px] h-[70px] rounded-full object-cover shadow-md border-2 border-white group-hover:border-verde-boticario transition-all">
-                    <span class="text-[11px] font-medium text-gray-600 text-center">${marca.nome}</span>
-                </a>
-            `).join('');
+        // Link do rodapé
+        document.getElementById('linkWeblocal')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            const urlParams = new URLSearchParams(window.location.search);
+            let whatsappNumber = urlParams.get('whatsapp') || CONFIG.VENDA_WHATSAPP;
+            window.open(`https://wa.me/${whatsappNumber.replace(/\D/g, '')}`, '_blank');
+        });
 
-            // Criar bolinhas indicadoras (apenas para as marcas originais)
-            dotsContainer.innerHTML = marcas.map((_, idx) => `
-                <div class="w-2 h-2 rounded-full bg-gray-300 transition-all duration-300 cursor-pointer" data-index="${idx}"></div>
-            `).join('');
-
-            const dots = document.querySelectorAll('#carouselDots div');
-            const items = carouselContainer.children;
-            const itemWidth = 82; // 70px + gap
-
-            // Posicionar no meio do array (para permitir scroll infinito)
-            const startPosition = marcas.length * itemWidth;
-            carouselContainer.scrollLeft = startPosition;
-
-            let currentIndex = marcas.length; // índice real no array infinito
-            let autoScrollInterval;
-
-            // Função para atualizar a bolinha ativa
-            function updateActiveDot() {
-                const scrollLeft = carouselContainer.scrollLeft;
-                const newIndex = Math.round(scrollLeft / itemWidth);
-
-                // Calcular o índice real (baseado nas marcas originais)
-                const originalIndex = newIndex % marcas.length;
-
-                dots.forEach((dot, idx) => {
-                    if (idx === originalIndex) {
-                        dot.classList.remove('bg-gray-300');
-                        dot.classList.add('bg-verde-boticario');
-                        dot.style.width = '12px';
-                    } else {
-                        dot.classList.remove('bg-verde-boticario');
-                        dot.classList.add('bg-gray-300');
-                        dot.style.width = '8px';
-                    }
-                });
-
-                currentIndex = newIndex;
-
-                // Efeito infinito: quando chega perto do fim, volta ao meio
-                if (currentIndex >= marcasInfinitas.length - marcas.length) {
-                    carouselContainer.scrollLeft = startPosition + (currentIndex - (marcasInfinitas.length - marcas.length)) * itemWidth;
-                }
-                if (currentIndex <= marcas.length - 1) {
-                    carouselContainer.scrollLeft = startPosition - (marcas.length - currentIndex) * itemWidth;
-                }
-            }
-
-            // Scroll automático
-            function startAutoScroll() {
-                if (autoScrollInterval) clearInterval(autoScrollInterval);
-                autoScrollInterval = setInterval(() => {
-                    let nextIndex = currentIndex + 1;
-                    carouselContainer.scrollTo({
-                        left: nextIndex * itemWidth,
-                        behavior: 'smooth'
-                    });
-                }, 3000);
-            }
-
-            // Clique nas bolinhas
-            dots.forEach((dot, idx) => {
-                dot.addEventListener('click', () => {
-                    const newPosition = (startPosition + idx * itemWidth);
-                    carouselContainer.scrollTo({
-                        left: newPosition,
-                        behavior: 'smooth'
-                    });
-                });
-            });
-
-            // Eventos do carrossel
-            carouselContainer.addEventListener('scroll', updateActiveDot);
-            carouselContainer.addEventListener('mouseenter', () => {
-                if (autoScrollInterval) clearInterval(autoScrollInterval);
-            });
-            carouselContainer.addEventListener('mouseleave', startAutoScroll);
-            carouselContainer.addEventListener('touchstart', () => {
-                if (autoScrollInterval) clearInterval(autoScrollInterval);
-            });
-            carouselContainer.addEventListener('touchend', startAutoScroll);
-
-            // Iniciar
-            setTimeout(() => {
-                updateActiveDot();
-                startAutoScroll();
-            }, 100);
-        }
+        window.adicionarAoCarrinho = adicionarAoCarrinho;
+        window.alterarQuantidade = alterarQuantidade;
+        window.removerProduto = removerProduto;
+        window.fecharPopup = () => { const popup = document.getElementById('socialProof'); if(popup) { popup.classList.add('translate-x-[-120%]', 'opacity-0'); popup.classList.remove('translate-x-0', 'opacity-100'); popupAtivo = false; } };
 
         window.addEventListener('DOMContentLoaded', initPage);
     </script>
 
-    <!-- Pop-up de Prova Social Realista -->
-<div id="socialProof" class="fixed bottom-5 left-5 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-3 flex items-center gap-3 z-[9997] transition-all duration-500 transform translate-x-[-120%] opacity-0 max-w-[340px] border border-gray-100">
-    <!-- Avatar/Ícone -->
-    <div class="relative flex-shrink-0">
-        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-verde-boticario to-verde-claro flex items-center justify-center overflow-hidden">
-            <i class="fas fa-user text-white text-lg"></i>
+    <!-- Pop-up Social -->
+    <div id="socialProof" class="fixed bottom-5 left-5 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-3 flex items-center gap-3 z-[9997] transition-all duration-500 transform translate-x-[-120%] opacity-0 max-w-[340px] border border-gray-100">
+        <div class="relative flex-shrink-0">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-verde-boticario to-verde-claro flex items-center justify-center"><i class="fas fa-user text-white text-lg"></i></div>
+            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
         </div>
-        <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-    </div>
-    
-    <div class="flex-1">
-        <p class="text-sm font-semibold text-gray-800">
-            <span id="socialNome" class="text-verde-boticario">Alguém</span>
-            <span id="socialAcao" class="font-normal text-gray-600">acabou de visualizar</span>
-        </p>
-        <div class="flex items-center gap-2 mt-1 flex-wrap">
-            <i class="fas fa-map-marker-alt text-[10px] text-gray-400"></i>
-            <span id="socialLocal" class="text-[11px] text-gray-400">Juiz de Fora, MG</span>
-            <span class="text-[10px] text-gray-300">•</span>
-            <i class="fas fa-clock text-[10px] text-gray-400"></i>
-            <span id="socialTempo" class="text-[11px] text-gray-400">agora mesmo</span>
+        <div class="flex-1">
+            <p class="text-sm font-semibold text-gray-800"><span id="socialNome" class="text-verde-boticario">Alguém</span> <span id="socialAcao" class="font-normal text-gray-600">acabou de visualizar</span></p>
+            <div class="flex items-center gap-2 mt-1"><i class="fas fa-map-marker-alt text-[10px] text-gray-400"></i><span id="socialLocal" class="text-[11px] text-gray-400">Juiz de Fora, MG</span><i class="fas fa-clock text-[10px] text-gray-400 ml-1"></i><span id="socialTempo" class="text-[11px] text-gray-400">agora mesmo</span></div>
         </div>
+        <button onclick="fecharPopup()" class="text-gray-300 hover:text-gray-500"><i class="fas fa-times text-xs"></i></button>
     </div>
-    
-    <button onclick="fecharPopup()" class="text-gray-300 hover:text-gray-500 transition-colors -mr-1">
-        <i class="fas fa-times text-xs"></i>
-    </button>
-</div>
-
-<script>
-    // ==================== PRODUTOS DO GRUPO BOTICÁRIO ====================
-    const produtos = [
-        "Malbec Tradicional",
-        "Malbec Gold",
-        "Floratta Rose Sucrée",
-        "Floratta Blue",
-        "kit Mães Lily",
-        "Creme Lily Acetinado",
-        "Egeo Bomb Black",
-        "Egeo Choc",
-        "Quem Disse, Berenice? Kit Matte",
-        "Base Líquida Berenice",
-        "O.U.i L'Élixir",
-        "O.U.i Mon Amie",
-        "Batom Instamatte Berenice",
-        "Perfume Lily Eau de Parfum",
-        "Kit Presente Malbec",
-        "Creme para mãos Eudora",
-        "Protetor solar Berenice",
-        "Kit Pulse Intenso Eudora"
-    ];
-    
-    // ==================== CIDADES DA ZONA DA MATA MINEIRA ====================
-    const cidades = [
-        "Juiz de Fora, MG",
-        "Ubá, MG",
-        "São João Nepomuceno, MG",
-        "Cataguases, MG",
-        "Leopoldina, MG",
-        "Santos Dumont, MG",
-        "Matias Barbosa, MG",
-        "Simão Pereira, MG",
-        "Rio Preto, MG",
-        "Pequeri, MG",
-        "Guarani, MG",
-        "Tabuleiro, MG",
-        "Coronel Pacheco, MG",
-        "Bias Fortes, MG",
-        "Chiador, MG"
-    ];
-    
-    // ==================== NOMES COMUNS DA REGIÃO ====================
-    const pessoas = [
-        "Maria F.", "Ana R.", "Fernanda L.", "Patrícia S.", "Juliana M.",
-        "Carla O.", "Roberta A.", "Tatiana R.", "Luciana F.", "Camila B.",
-        "Beatriz C.", "Renata M.", "Vanessa P.", "Aline N.", "Mariana L.",
-        "Letícia S.", "Isabela C.", "Larissa M.", "Natália R.", "Amanda F."
-    ];
-    
-    // ==================== AÇÕES COM PRODUTOS ====================
-    const acoesComProdutos = [
-        (p) => `acabou de ver ${p}`,
-        (p) => `está interessada em ${p}`,
-        (p) => `comprou ${p} agora`,
-        (p) => `adicionou ${p} ao carrinho`,
-        (p) => `viu ${p} há pouco`,
-        (p) => `está olhando ${p}`,
-        (p) => `acabou de comprar ${p}`,
-        (p) => `recomendou ${p} para amiga`,
-        (p) => `está vendo ${p} pela 2ª vez`,
-        (p) => `quer saber o preço de ${p}`
-    ];
-    
-    // Ações sem produto (genéricas)
-    const acoesGenericas = [
-        "acabou de ver a loja",
-        "está visualizando as ofertas",
-        "acabou de acessar",
-        "viu o catálogo há pouco",
-        "está na página agora",
-        "entrou agora mesmo",
-        "acabou de chegar",
-        "clicou no link há pouco",
-        "está vendo os produtos em promoção"
-    ];
-    
-    // Tempos relativos
-    const tempos = [
-        "agora mesmo",
-        "há 10 segundos",
-        "há 25 segundos",
-        "há 1 minuto",
-        "há 2 minutos",
-        "há 30 segundos",
-        "há 45 segundos",
-        "há 50 segundos",
-        "há 1 minuto e 15 segundos"
-    ];
-    
-    let popupInterval;
-    let popupAtivo = false;
-    let timeoutPopup;
-    let ultimosNomes = [];
-    let ultimoProduto = "";
-    
-    const popup = document.getElementById('socialProof');
-    const socialNome = document.getElementById('socialNome');
-    const socialAcao = document.getElementById('socialAcao');
-    const socialLocal = document.getElementById('socialLocal');
-    const socialTempo = document.getElementById('socialTempo');
-    
-    // Função para evitar nomes repetidos
-    function getNomeUnico() {
-        let nomesDisponiveis = pessoas.filter(n => !ultimosNomes.includes(n));
-        
-        if (nomesDisponiveis.length === 0) {
-            ultimosNomes = [];
-            nomesDisponiveis = pessoas;
-        }
-        
-        const randomIndex = Math.floor(Math.random() * nomesDisponiveis.length);
-        const escolhido = nomesDisponiveis[randomIndex];
-        
-        ultimosNomes.push(escolhido);
-        if (ultimosNomes.length > 3) ultimosNomes.shift();
-        
-        return escolhido;
-    }
-    
-    // Função para pegar produto diferente do último
-    function getProdutoUnico() {
-        let produtosDisponiveis = produtos.filter(p => p !== ultimoProduto);
-        if (produtosDisponiveis.length === 0) produtosDisponiveis = produtos;
-        
-        const escolhido = produtosDisponiveis[Math.floor(Math.random() * produtosDisponiveis.length)];
-        ultimoProduto = escolhido;
-        return escolhido;
-    }
-    
-    // Decidir se mostra ação com produto (70%) ou genérica (30%)
-    function getAcao() {
-        const temProduto = Math.random() < 0.7; // 70% com produto
-        
-        if (temProduto) {
-            const produto = getProdutoUnico();
-            const acaoIndex = Math.floor(Math.random() * acoesComProdutos.length);
-            return acoesComProdutos[acaoIndex](produto);
-        } else {
-            return acoesGenericas[Math.floor(Math.random() * acoesGenericas.length)];
-        }
-    }
-    
-    // Função para mostrar o pop-up
-    function mostrarPopup() {
-        if (popupAtivo) return;
-        
-        // Escolher dados aleatórios
-        const nome = getNomeUnico();
-        const acao = getAcao();
-        const cidade = cidades[Math.floor(Math.random() * cidades.length)];
-        const tempo = tempos[Math.floor(Math.random() * tempos.length)];
-        
-        // Atualizar conteúdo
-        socialNome.textContent = nome;
-        socialAcao.textContent = acao;
-        socialLocal.textContent = cidade;
-        socialTempo.textContent = tempo;
-        
-        // Mostrar pop-up com animação
-        popup.classList.remove('translate-x-[-120%]', 'opacity-0');
-        popup.classList.add('translate-x-0', 'opacity-100');
-        popupAtivo = true;
-        
-        // Esconder após 6 segundos
-        if (timeoutPopup) clearTimeout(timeoutPopup);
-        timeoutPopup = setTimeout(() => {
-            fecharPopup();
-        }, 6000);
-    }
-    
-    function fecharPopup() {
-        popup.classList.remove('translate-x-0', 'opacity-100');
-        popup.classList.add('translate-x-[-120%]', 'opacity-0');
-        popupAtivo = false;
-    }
-    
-    // Iniciar pop-up em intervalos aleatórios
-    function iniciarPopupAutomatico() {
-        if (popupInterval) clearInterval(popupInterval);
-        
-        const primeiroDelay = Math.floor(Math.random() * (7000 - 4000 + 1) + 4000);
-        setTimeout(() => {
-            mostrarPopup();
-        }, primeiroDelay);
-        
-        function agendarProximo() {
-            const intervalo = Math.floor(Math.random() * (16000 - 9000 + 1) + 9000);
-            popupInterval = setTimeout(() => {
-                mostrarPopup();
-                agendarProximo();
-            }, intervalo);
-        }
-        
-        agendarProximo();
-    }
-    
-    // Eventos
-    popup.addEventListener('mouseenter', () => {
-        if (timeoutPopup) clearTimeout(timeoutPopup);
-    });
-    
-    popup.addEventListener('mouseleave', () => {
-        timeoutPopup = setTimeout(() => {
-            fecharPopup();
-        }, 2000);
-    });
-    
-    window.addEventListener('DOMContentLoaded', iniciarPopupAutomatico);
-
-        // ==================== LINK DO RODAPÉ PARA WHATSAPP ====================
-    const linkWeblocal = document.getElementById('linkWeblocal');
-    if (linkWeblocal) {
-        linkWeblocal.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            // Pegar número do WhatsApp da URL (se existir)
-            const urlParams = new URLSearchParams(window.location.search);
-            let whatsappNumber = urlParams.get('whatsapp');
-            
-            // Se não tiver número na URL, usa um padrão (coloque seu número aqui)
-            if (!whatsappNumber) {
-                whatsappNumber = '5541988629249'; // ← SUBSTITUA PELO SEU NÚMERO
-            }
-            
-            // Limpar número (deixar só dígitos)
-            const cleanNumber = whatsappNumber.replace(/\D/g, '');
-            
-            // Abrir WhatsApp
-            window.open(`https://wa.me/${cleanNumber}`, '_blank');
-        });
-    }
-</script>
 
 </body>
-
 </html>
