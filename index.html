@@ -329,7 +329,7 @@
         // ==================== CARRINHO ====================
         let carrinho = [];
 
-        function atualizarCarrinho() {
+                function atualizarCarrinho() {
             const cartCount = document.getElementById('cartCount');
             const cartItems = document.getElementById('cartItems');
             const cartTotal = document.getElementById('cartTotal');
@@ -345,11 +345,15 @@
                     cartItems.innerHTML = '<div class="text-center text-gray-400 py-8"><i class="fas fa-shopping-bag text-4xl mb-2"></i><p>Seu carrinho está vazio</p></div>';
                 } else {
                     cartItems.innerHTML = carrinho.map(item => `
-                        <div class="flex justify-between items-center border-b pb-3">
+                        <div class="flex items-center gap-3 border-b pb-3">
+                            <!-- Imagem do produto em círculo -->
+                            <img src="${item.imagem}" alt="${item.nome}" class="w-12 h-12 rounded-full object-cover border-2 border-verde-boticario">
+                            
                             <div class="flex-1">
                                 <p class="text-sm font-semibold">${item.nome}</p>
                                 <p class="text-xs text-gray-500">R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
                             </div>
+                            
                             <div class="flex items-center gap-2">
                                 <button onclick="alterarQuantidade(${item.id}, -1)" class="w-7 h-7 bg-gray-200 rounded-full hover:bg-gray-300">-</button>
                                 <span class="w-8 text-center">${item.quantidade}</span>
